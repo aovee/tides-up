@@ -2,6 +2,22 @@
 useSeoMeta({
   title: 'Nouveau rappel'
 })
+
+const loading = ref(false)
+const toast = useToast()
+
+async function create(data: ReminderFormState) {
+  loading.value = true
+  try {
+    await $fetch('/api/reminders', { method: 'POST', body: data })
+    toast.add({ title: 'Rappel créé', color: 'success' })
+    await navigateTo('/')
+  } catch (error) {
+    toast.add({ title: errorMessage(error), color: 'error' })
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -35,7 +51,7 @@ useSeoMeta({
 
     <UPageBody>
       <UCard variant="soft">
-        <RemindersForm mode="create" />
+        <RemindersForm mode="create" @submit="create" />
       </UCard>
     </UPageBody>
 
