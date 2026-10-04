@@ -29,6 +29,8 @@ const { data: categories } = await useFetch<Category[]>('/api/categories', {
   default: () => []
 })
 
+const emit = defineEmits<{ submit: [ReminderFormState] }>()
+
 const state = reactive<ReminderFormState>({
   name: '',
   categoryId: null,
@@ -78,7 +80,9 @@ const unitItems = (Object.keys(UNIT_LABELS) as IntervalUnit[]).map((value) => ({
   value
 }))
 
-const handleSubmit = async () => {}
+const handleSubmit = async () => {
+  emit('submit', { ...state, note: state.note?.trim() || null })
+}
 </script>
 
 <template>
@@ -128,9 +132,9 @@ const handleSubmit = async () => {}
         help="Minimum : pas avant. Maximum : la date limite."
       >
         <div class="flex items-center gap-3">
-          <UInput v-model="state.minInterval" type="number" placeholder="7" />
+          <UInputNumber v-model="state.minInterval" :min="0" placeholder="7" />
           à
-          <UInput v-model="state.maxInterval" type="number" placeholder="14" />
+          <UInputNumber v-model="state.maxInterval" :min="0" placeholder="14" />
 
           <USelect v-model="state.unit" :items="unitItems" class="min-w-40" />
         </div>
@@ -152,6 +156,45 @@ const handleSubmit = async () => {}
 
     <USeparator />
 
+    <div class="flex items-center gap-2 font-semibold text-sm mb-5">
+      <UIcon name="i-ph-bell-ringing" class="text-primary" />
+      Notifications
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <UFormField name="notifyDaysBefore">
+        <div class="flex items-center gap-3">
+          <UInputNumber
+            v-model="state.notifyDaysBefore"
+            placeholder="1"
+            class="w-28"
+            :min="0"
+          />
+          jour(s) avant la date limite
+        </div>
+      </UFormField>
+
+      <UFormField v-if="state.kind === 'recurring'" name="notifyOnWindowOpen">
+        <USwitch
+          v-model="state.notifyOnWindowOpen"
+          label="Prévenir aussi à le jour J"
+          description="« Tu peux le faire à partir d'aujourd'hui »"
+        />
+      </UFormField>
+    </div>
+
+    <UFormField label="Note" name="note">
+      <UTextarea
+        :model-value="state.note ?? undefined"
+        @update:model-value="state.note = $event || null"
+        :rows="2"
+        autoresize
+        class="w-full"
+        placeholder="Exemple : 'Pense à prendre le code de la porte'"
+      />
+    </UFormField>
+
+    <USeparator />
+
     <div class="flex items-center justify-end gap-3">
       <UButton
         label="Annuler"
@@ -160,10 +203,11 @@ const handleSubmit = async () => {}
         to="/reminders"
       />
       <UButton
-        label="Créer le rappel"
+        type="submit"
         icon="i-ph-checks"
         color="primary"
-        @click="handleSubmit"
+        :loading="loading"
+        :label="mode === 'create' ? 'Créer le rappel' : 'Enregistrer'"
       />
     </div>
   </UForm>
