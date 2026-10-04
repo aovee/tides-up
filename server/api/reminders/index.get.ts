@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
 
   return await db
     .select()
-    .from(schema.users)
+    .from(schema.reminders)
     .where(eq(schema.reminders.userId, user.id))
 })
