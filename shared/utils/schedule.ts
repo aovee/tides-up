@@ -10,7 +10,7 @@ import {
 
 export type IntervalUnit = 'day' | 'week' | 'month' | 'year'
 export type ReminderKind = 'recurring' | 'once'
-export type ReminderStatus = 'early' | 'due' | 'late' | 'done'
+export type ReminderStatus = 'early' | 'due' | 'late'
 
 export interface SchedulableReminder {
   kind: ReminderKind
@@ -41,7 +41,7 @@ export const TIME_ZONE = 'Europe/Paris'
 
 /** Date du jour (AAAA-MM-JJ) dans le fuseau de l'appli, quel que soit celui du serveur */
 export function todayIso(now = new Date()): string {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(now)
+  return new Intl.DateTimeFormat('fr-FR', { timeZone: TIME_ZONE }).format(now)
 }
 
 export function toIso(date: Date): string {
@@ -80,7 +80,7 @@ export function computeSchedule(
 
   if (r.completed || !deadline || !windowStart) {
     return {
-      status: 'done',
+      status: 'early',
       windowStart,
       deadline,
       notifyOn: null,
@@ -108,8 +108,17 @@ export function computeSchedule(
 const STATUS_RANK: Record<ReminderStatus, number> = {
   late: 0,
   due: 1,
-  early: 2,
-  done: 3
+  early: 2
+}
+
+const STATUS_LABEL: Record<ReminderStatus, string> = {
+  late: 'En retard',
+  due: 'À faire',
+  early: 'Trop tôt'
+}
+
+export function getStatusLabel(status: ReminderStatus): string {
+  return STATUS_LABEL[status]
 }
 
 /** Tri par urgence : en retard, puis à faire, puis trop tôt ; à égalité, l'échéance la plus proche d'abord */
