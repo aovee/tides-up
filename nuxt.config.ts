@@ -40,6 +40,9 @@ export default defineNuxtConfig({
     mailFrom: 'Tides Up <onboarding@resend.dev>',
     public: {
       siteUrl: ''
+    },
+    session: {
+      maxAge: 60 * 60 * 24 * 7 // 1 week
     }
   },
 
