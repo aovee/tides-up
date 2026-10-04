@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@import "@nuxt/ui";
+
+@theme {
+  --font-sans: 'Figtree', sans-serif;
+}
+
+@theme static {
+  --container-8xl: 90rem;
+  
+  --color-brand-50: oklch(98.4% 0.014 180.736);
+  --color-brand-100: oklch(95.1% 0.052 180.5);
+  --color-brand-200: oklch(89.9% 0.088 181.477);
+  --color-brand-300: oklch(81% 0.113 184.324);
+  --color-brand-400: oklch(68.7% 0.102 188.706);
+  --color-brand-500: oklch(57.7% 0.072 191.68);
+  --color-brand-600: oklch(51.6% 0.066 191.059);
+  --color-brand-700: oklch(47.9% 0.074 188.997);
+  --color-brand-800: oklch(42.6% 0.072 188.403);
+  --color-brand-900: oklch(35.5% 0.061 189.583);
+  --color-brand-950: oklch(27.7% 0.046 192.54);
+  
+  --color-accent-50: oklch(0.966 0.007 260.77);
+  --color-accent-100: oklch(0.923 0.017 259.43);
+  --color-accent-200: oklch(0.845 0.034 259.42);
+  --color-accent-300: oklch(0.767 0.054 257.37);
+  --color-accent-400: oklch(0.69 0.072 254.71);
+  --color-accent-500: oklch(0.612 0.066 254.77);
+  --color-accent-600: oklch(0.535 0.057 255.05);
+  --color-accent-700: oklch(0.458 0.048 254.29);
+  --color-accent-800: oklch(0.379 0.041 256.85);
+  --color-accent-900: oklch(0.301 0.032 254.3);
+  --color-accent-950: oklch(0.265 0.028 255.2);
+}
+
+@layer base {
+  body {
+    line-height: 1.6;
+  }
+}
+
+:root {
+  --ui-container: var(--container-8xl);
+  --ui-radius: 0.125rem;
+}
+
+:root, .light {
+  --ui-bg: var(--ui-color-neutral-50);
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-text-inverted: var(--ui-color-neutral-50);
+}
+
+.dark {
+  --ui-text-highlighted: var(--ui-color-neutral-50);
+  --ui-bg-inverted: var(--ui-color-neutral-50);
+  --ui-border-inverted: var(--ui-color-neutral-50);
+  --ui-bg: #121A24;
+  --ui-bg-muted: var(--ui-color-neutral-800);
+  --ui-text-inverted: var(--ui-color-neutral-900);
+}
